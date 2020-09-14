@@ -6,18 +6,18 @@ const express = require("express");
 const app = express();
 
 //cargo las rutas
-const botiquin_routes = require(".src/routes/botiquin");
-const enfermedades_routes = require(".src/routes/enfermedades");
-const partos_routes = require(".src/routes/partos");
-const calores_routes = require(".src/routes/calores");
-const inseminaciones_routes = require(".src/routes/inseminaciones");
-const fincas_routes = require(".src/routes/fincas");
-const usuarios_routes = require(".src/routes/usuarios");
-const roles_routes = require(".src/routes/roles");
-const potreros_routes = require(".src/routes/potreros");
-const animales_routes = require(".src/routes/animales");
-const produccion_lechera_routes = require(".src/routes/produccion_lechera");
-const auth_routes = require(".src/routes/auth");
+const botiquin_routes = require("./src/routes/botiquin");
+const enfermedades_routes = require("./src/routes/enfermedades");
+const partos_routes = require("./src/routes/partos");
+const calores_routes = require("./src/routes/calores");
+const inseminaciones_routes = require("./src/routes/inseminaciones");
+const fincas_routes = require("./src/routes/fincas");
+const usuarios_routes = require("./src/routes/usuarios");
+const roles_routes = require("./src/routes/roles");
+const potreros_routes = require("./src/routes/potreros");
+const animales_routes = require("./src/routes/animales");
+const produccion_lechera_routes = require("./src/routes/produccion_lechera");
+const auth_routes = require("./src/routes/auth");
 
 //Configuracion del servidor
 app.set("port", process.env.PORT || 3000); //seteo una variable puerto en app, primero busca un puerto asignado y si no consigue asigna el 3000
