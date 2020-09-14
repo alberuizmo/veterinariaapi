@@ -39,7 +39,7 @@ var controller = {
   },
   saveFinca: (req, res) => {
     const { nombre, direccion } = req.body;
-    const query = "INSERT INTO `fincas` VALUES(NULL, ?, ?,?)";
+    const query = "INSERT INTO `fincas` VALUES(NULL, `?`, `?`,`?`)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
