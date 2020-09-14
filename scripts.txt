@@ -1,0 +1,8 @@
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Creacion de animales','CA',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Creacion de roles','CR',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Creacion de Potreros','CP',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Creacion de Usuarios','CU',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Reporte lechero','RL',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Eliminar Animales','EA',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Manejo de Botiquin','MB',LOCALTIME());
+INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Asignacion de Veterinarios','AV',LOCALTIME());
