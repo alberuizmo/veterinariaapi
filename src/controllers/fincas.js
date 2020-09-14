@@ -51,7 +51,9 @@ var controller = {
             id_creado: result.insertId,
           });
         } else {
-          return res.status(500).send({ message: "Error al guardar la finca" });
+          return res
+            .status(500)
+            .send({ message: "Error al guardar la finca", error: err });
         }
       }
     );
