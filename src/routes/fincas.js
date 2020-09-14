@@ -9,9 +9,9 @@ const router = express.Router(); //utilizo el modulo rutas de express
 router.use(fileUpload()); //uso el modulo de subir archivos en router
 
 router.get("/fincas", FincasController.allFincas); // todas las fincas
+router.get("/fincas/prueba", FincasController.prueba); // crear finca
 router.get("/fincas/:id", FincasController.getFincaById); // una finca por Id
 router.post("/fincas", FincasController.saveFinca); // crear finca
-router.get("/fincas/prueba", FincasController.prueba); // crear finca
 
 module.exports = router;
 
