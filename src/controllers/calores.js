@@ -6,7 +6,7 @@ var controller = {
   allCalores: (req, res) => {
     const { finca_id, usuario_id, token } = req.body;
     const query =
-      "SELECT calores.*, animales.nombre as nombre_animal FROM calores INNER JOIN animales ON calores.animal_id = animales.id WHERE calores.finca_id=?";
+      "SELECT calores.*, animales.nombre as nombre_animal, animales.identificacion as identificacion_animal FROM calores INNER JOIN animales ON calores.animal_id = animales.id WHERE calores.finca_id=?";
     mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
       if (err) {
         return res
@@ -40,12 +40,29 @@ var controller = {
     );
   },
   saveCalor: (req, res) => {
-    const { animal_id, fecha, observaciones, finca_id, usuario_id } = req.body;
-    const query = "INSERT INTO calores VALUES(NULL,?,?,?,?,?,?)";
+    const {
+      animal_id,
+      fecha,
+      observaciones,
+      en_calor,
+      post_inseminacion,
+      finca_id,
+      usuario_id,
+    } = req.body;
+    const query = "INSERT INTO calores VALUES(NULL,?,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
-      [animal_id, fecha, observaciones, finca_id, fechaHoraActual, usuario_id],
+      [
+        animal_id,
+        fecha,
+        observaciones,
+        en_calor,
+        post_inseminacion,
+        finca_id,
+        fechaHoraActual,
+        usuario_id,
+      ],
       (err, result) => {
         if (!err) {
           res.send({

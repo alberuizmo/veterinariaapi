@@ -6,3 +6,6 @@ INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Report
 INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Eliminar Animales','EA',LOCALTIME());
 INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Manejo de Botiquin','MB',LOCALTIME());
 INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Asignacion de Veterinarios','AV',LOCALTIME());
+
+ALTER TABLE `calores` ADD `en_calor` INT(10) NOT NULL AFTER `observaciones`;
+ALTER TABLE `calores` ADD `post_inseminacion` INT(10) NOT NULL AFTER `en_calor`;

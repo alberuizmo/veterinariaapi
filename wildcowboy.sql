@@ -142,6 +142,8 @@ CREATE TABLE calores (
     animal_id int (255) not null,
     fecha datetime not null,
     observaciones varchar (255) not null,
+    en_calor int (10) not null,
+    post_inseminacion int (10) not null,
     finca_id int (255) not null,
     updated datetime not null,
     usuario_id int (255) not null,
