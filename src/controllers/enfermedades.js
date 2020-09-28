@@ -4,10 +4,9 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allEnfermedades: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     const query =
       "SELECT enfermedades.*, animales.nombre as nombre_animal FROM enfermedades INNER JOIN animales ON enfermedades.animal_id = animales.id WHERE enfermedades.finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res
           .status(500)
@@ -24,18 +23,16 @@ var controller = {
   getEnfermedadById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "select * from enfermedades where id=?",
-      [id],
+      "select * from enfermedades where id=? and finca_id=?",
+      [id, req.finca_id],
       (err, rows, fields) => {
         if (err) {
-          return res
-            .status(500)
-            .send({ mensaje: "Error al reportar la enfermedad" });
+          return res.status(500).send({ mensaje: "La enfermedad no existe" });
         }
         if (rows.length == 0) {
           return res
-            .status(404)
-            .send({ mensaje: "El reporte no existe", data: [] });
+            .status(200)
+            .send({ mensaje: "No hay enfermedades para mostrar", data: [] });
         }
         return res.status(200).send({ data: rows[0] });
       }
@@ -48,10 +45,19 @@ var controller = {
       sintomas,
       observaciones,
       fecha,
-      finca_id,
-      usuario_id,
+      tratamiento,
+      come,
+      bebe,
+      camina,
+      de_pie,
+      fiebre,
+      defeca,
+      baja_produccion,
+      herida,
+      emergencia,
     } = req.body;
-    const query = "INSERT INTO enfermedades VALUES(NULL,?,?,?,?,?,?,?,?)";
+    const query =
+      "INSERT INTO enfermedades VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
@@ -61,9 +67,19 @@ var controller = {
         sintomas,
         observaciones,
         fecha,
-        finca_id,
+        tratamiento,
+        come,
+        bebe,
+        camina,
+        de_pie,
+        fiebre,
+        defeca,
+        baja_produccion,
+        herida,
+        emergencia,
+        req.finca_id,
         fechaHoraActual,
-        usuario_id,
+        req.usuario_id,
       ],
       (err, result) => {
         if (!err) {

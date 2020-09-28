@@ -4,10 +4,9 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allAnimales: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     const query =
       "SELECT animales.*, potreros.nombre as nombre_potrero FROM potreros INNER JOIN animales ON potreros.id = animales.potrero_id WHERE potreros.finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res
           .status(500)
@@ -24,8 +23,8 @@ var controller = {
   getAnimalById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "select * from animales where id=?",
-      [id],
+      "SELECT animales.*, potreros.nombre as nombre_potrero FROM potreros INNER JOIN animales ON potreros.id = animales.potrero_id WHERE potreros.finca_id=? and animales.id=? ",
+      [req.finca_id, id],
       (err, rows, fields) => {
         if (err) {
           return res
@@ -59,10 +58,11 @@ var controller = {
       vendedor_nombre,
       vendedor_telefono,
       sexo,
-      usuario_id,
+      color,
+      raza,
     } = req.body;
     const query =
-      "INSERT INTO animales VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      "INSERT INTO animales VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
@@ -83,8 +83,10 @@ var controller = {
         vendedor_nombre,
         vendedor_telefono,
         sexo,
+        color,
+        raza,
         fechaHoraActual,
-        usuario_id,
+        req.usuario_id,
       ],
       (err, result) => {
         if (!err) {

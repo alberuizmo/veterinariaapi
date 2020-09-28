@@ -17,7 +17,6 @@ const roles_routes = require("./src/routes/roles");
 const potreros_routes = require("./src/routes/potreros");
 const animales_routes = require("./src/routes/animales");
 const produccion_lechera_routes = require("./src/routes/produccion_lechera");
-const auth_routes = require("./src/routes/auth");
 
 //Configuracion del servidor
 app.set("port", process.env.PORT || 3000); //seteo una variable puerto en app, primero busca un puerto asignado y si no consigue asigna el 3000
@@ -49,7 +48,6 @@ app.use("/api", usuarios_routes); //solicito el archivo de rutas de usuarios
 app.use("/api", roles_routes); //solicito el archivo de rutas de roles
 app.use("/api", potreros_routes); //solicito el archivo de rutas de potreros
 app.use("/api", animales_routes); //solicito el archivo de rutas de animale
-app.use("/api", auth_routes); //solicito el archivo de rutas de autenticacion
 
 //Iniciando el servidor, se indica el puerto donde escuchara
 app.listen(app.get("port"), () => {

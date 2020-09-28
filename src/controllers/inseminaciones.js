@@ -4,10 +4,9 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allInseminaciones: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     const query =
       "SELECT inseminaciones.*, animales.nombre as nombre_animal, animales.identificacion as identificacion_animal FROM inseminaciones INNER JOIN animales ON inseminaciones.animal_id = animales.id WHERE inseminaciones.finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res
           .status(500)
@@ -24,8 +23,8 @@ var controller = {
   getInseminacionById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "select * from inseminaciones where id=?",
-      [id],
+      "select * from inseminaciones where id=? and finca_id=?",
+      [id, req.finca_id],
       (err, rows, fields) => {
         if (err) {
           return res
@@ -43,16 +42,17 @@ var controller = {
   },
   saveInseminacion: (req, res) => {
     const {
-      finca_id,
-      usuario_id,
       animal_id,
       animal_donante_id,
       donante_identificacion,
       donante_nombre,
       fecha,
       observaciones,
+      artificial,
+      codigo_pajilla,
     } = req.body;
-    const query = "INSERT INTO inseminaciones VALUES(NULL,?,?,?,?,?,?,?,?,?)";
+    const query =
+      "INSERT INTO inseminaciones VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
@@ -63,14 +63,16 @@ var controller = {
         donante_nombre,
         fecha,
         observaciones,
-        finca_id,
+        artificial,
+        codigo_pajilla,
+        req.finca_id,
         fechaHoraActual,
-        usuario_id,
+        req.usuario_id,
       ],
       (err, result) => {
         if (!err) {
           res.send({
-            mensaje: "Inseminacion creada",
+            mensaje: "Inseminación creada",
             id_creado: result.insertId,
           });
         } else {

@@ -9,3 +9,5 @@ INSERT INTO `permisos` (`id`, `nombre`, `codigo`, `updated`) VALUES(NULL,'Asigna
 
 ALTER TABLE `calores` ADD `en_calor` INT(10) NOT NULL AFTER `observaciones`;
 ALTER TABLE `calores` ADD `post_inseminacion` INT(10) NOT NULL AFTER `en_calor`;
+
+ALTER TABLE `produccion_lechera` ADD `finca_id` INT(10) NOT NULL AFTER `usuario_id`;

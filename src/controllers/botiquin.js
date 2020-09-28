@@ -4,9 +4,8 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allMedicinas: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     const query = "SELECT botiquin.* FROM botiquin WHERE finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res
           .status(500)
@@ -23,8 +22,8 @@ var controller = {
   getMedicinaById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "select * from botiquin where id=?",
-      [id],
+      "select * from botiquin where id=? and finca_id=?",
+      [id, req.finca_id],
       (err, rows, fields) => {
         if (err) {
           return res
@@ -42,7 +41,7 @@ var controller = {
   },
   saveMedicina: (req, res) => {
     const {
-      finca_id,
+      codigo,
       medicina,
       cantidad,
       unidades,
@@ -50,14 +49,14 @@ var controller = {
       presentacion,
       marca,
       observaciones,
-      usuario_id,
     } = req.body;
-    const query = "INSERT INTO botiquin VALUES(NULL,?,?,?,?,?,?,?,?,?,?)";
+    const query = "INSERT INTO botiquin VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
       [
-        finca_id,
+        req.finca_id,
+        codigo,
         medicina,
         cantidad,
         unidades,
@@ -66,12 +65,12 @@ var controller = {
         marca,
         observaciones,
         fechaHoraActual,
-        usuario_id,
+        req.usuario_id,
       ],
       (err, result) => {
         if (!err) {
           res.send({
-            mensaje: "Medicina creado",
+            mensaje: "Medicina creada",
             id_creado: result.insertId,
           });
         } else {

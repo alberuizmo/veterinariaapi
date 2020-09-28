@@ -4,10 +4,9 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allPartos: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     const query =
       "SELECT partos.*, animales.nombre as nombre_animal, animales.identificacion as identificacion_animal FROM partos INNER JOIN animales ON partos.animal_id = animales.id WHERE partos.finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res.status(500).send({ mensaje: "Error al obtener los partos" });
       }
@@ -22,8 +21,8 @@ var controller = {
   getPartoById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "select * from partos where id=?",
-      [id],
+      "select * from partos where id=? and finca_id=?",
+      [id, req.finca_id],
       (err, rows, fields) => {
         if (err) {
           return res.status(500).send({ mensaje: "Error al obtener el parto" });
@@ -38,14 +37,7 @@ var controller = {
     );
   },
   saveParto: (req, res) => {
-    const {
-      animal_id,
-      fecha,
-      hijos,
-      observaciones,
-      finca_id,
-      usuario_id,
-    } = req.body;
+    const { animal_id, fecha, hijos, observaciones } = req.body;
     const query = "INSERT INTO partos VALUES(NULL,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
@@ -55,9 +47,9 @@ var controller = {
         fecha,
         hijos,
         observaciones,
-        finca_id,
+        req.finca_id,
         fechaHoraActual,
-        usuario_id,
+        req.usuario_id,
       ],
       (err, result) => {
         if (!err) {

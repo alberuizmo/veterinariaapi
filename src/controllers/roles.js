@@ -4,9 +4,8 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allRoles: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     const query = "SELECT roles.* FROM roles WHERE finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res.status(500).send({ mensaje: "Error al obtener los roles" });
       }
@@ -18,8 +17,8 @@ var controller = {
   },
   getRolById: async (req, res) => {
     const id = req.params.id;
-    const query = "SELECT * FROM roles WHERE id=?";
-    mysqlConnection.query(query, [id], (err, rows, fields) => {
+    const query = "SELECT * FROM roles WHERE id=? and finca_id=?";
+    mysqlConnection.query(query, [id, req.finca_id], (err, rows, fields) => {
       if (err) {
         return res.status(500).send({ mensaje: "Error al obtener el rol" });
       }
@@ -51,12 +50,12 @@ var controller = {
     });
   },
   saveRol: (req, res) => {
-    const { rol, finca_id, usuario_id } = req.body;
+    const { rol } = req.body;
     const query = "INSERT INTO roles VALUES(NULL, ?, ?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
-      [rol, finca_id, fechaHoraActual],
+      [rol, req.finca_id, fechaHoraActual],
       (err, result) => {
         if (!err) {
           res.send({
@@ -79,7 +78,6 @@ var controller = {
     }
     const query = "INSERT INTO permisos_roles VALUES ?";
     mysqlConnection.query(query, [values], (err, result) => {
-      console.log(result);
       if (!err) {
         res.send({
           mensaje: "Rol-Permiso creado",

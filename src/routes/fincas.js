@@ -1,16 +1,10 @@
 const express = require("express"); //requiero express
-
-const fileUpload = require("express-fileupload"); //requiero el modulo de manejo de archivos
-
+const { isAuthenticated } = require("../auth");
+/* const fileUpload = require("express-fileupload"); //requiero el modulo de manejo de archivos */
 const FincasController = require("../controllers/fincas");
-
 const router = express.Router(); //utilizo el modulo rutas de express
-
-router.use(fileUpload()); //uso el modulo de subir archivos en router
-
-router.get("/fincas", FincasController.allFincas); // todas las fincas
-router.get("/fincas/prueba", FincasController.prueba); // crear finca
-router.get("/fincas/:id", FincasController.getFincaById); // una finca por Id
+/* router.use(fileUpload()); //uso el modulo de subir archivos en router */
+router.get("/fincas/:id", isAuthenticated, FincasController.getFincaById); // una finca por Id
 router.post("/fincas", FincasController.saveFinca); // crear finca
 
 module.exports = router;

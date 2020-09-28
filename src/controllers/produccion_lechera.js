@@ -4,10 +4,9 @@ const mysqlConnection = require("../database"); //requiero el archivo que hace l
 
 var controller = {
   allProduccionByFinca: (req, res) => {
-    const { finca_id, usuario_id, token } = req.body;
     let query =
       "SELECT produccion_lechera.*, animales.nombre, animales.identificacion FROM produccion_lechera INNER JOIN animales ON produccion_lechera.animal_id = animales.id WHERE produccion_lechera.finca_id=?";
-    mysqlConnection.query(query, [finca_id], (err, rows, fields) => {
+    mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res.status(500).send({ mensaje: "Error al obtener producción" });
       }
@@ -20,12 +19,12 @@ var controller = {
     });
   },
   allProduccionBySemana: (req, res) => {
-    const { finca_id, usuario_id, token, semana_del_year } = req.body;
+    const { semana_del_year } = req.body;
     let query =
       "SELECT produccion_lechera.*, animales.nombre, animales.identificacion FROM produccion_lechera INNER JOIN animales ON produccion_lechera.animal_id = animales.id WHERE produccion_lechera.finca_id=? and produccion_lechera.semana_del_year=?";
     mysqlConnection.query(
       query,
-      [finca_id, semana_del_year],
+      [req.finca_id, semana_del_year],
       (err, rows, fields) => {
         if (err) {
           console.log(err);
@@ -43,26 +42,32 @@ var controller = {
     );
   },
   allProduccionByAnimal: (req, res) => {
-    const { finca_id, usuario_id, token, animal_id } = req.body;
+    const { animal_id } = req.body;
     let query =
       "SELECT produccion_lechera.*, animales.nombre, animales.identificacion FROM produccion_lechera INNER JOIN animales ON produccion_lechera.animal_id = animales.id WHERE produccion_lechera.finca_id=? and produccion_lechera.animal_id=?";
-    mysqlConnection.query(query, [finca_id, animal_id], (err, rows, fields) => {
-      if (err) {
-        return res.status(500).send({ mensaje: "Error al obtener producción" });
+    mysqlConnection.query(
+      query,
+      [req.finca_id, animal_id],
+      (err, rows, fields) => {
+        if (err) {
+          return res
+            .status(500)
+            .send({ mensaje: "Error al obtener producción" });
+        }
+        if (rows.length == 0) {
+          return res
+            .status(200)
+            .send({ mensaje: "No hay producción para mostrar", data: [] });
+        }
+        return res.status(200).send({ data: rows });
       }
-      if (rows.length == 0) {
-        return res
-          .status(200)
-          .send({ mensaje: "No hay producción para mostrar", data: [] });
-      }
-      return res.status(200).send({ data: rows });
-    });
+    );
   },
   produccionById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "SELECT produccion_lechera.*, animales.nombre, animales.identificacion FROM produccion_lechera INNER JOIN animales ON produccion_lechera.animal_id = animales.id WHERE produccion_lechera.id=?",
-      [id],
+      "SELECT produccion_lechera.*, animales.nombre, animales.identificacion FROM produccion_lechera INNER JOIN animales ON produccion_lechera.animal_id = animales.id WHERE produccion_lechera.id=? and finca_id=?",
+      [id, req.finca_id],
       (err, rows, fields) => {
         if (err) {
           return res
@@ -89,8 +94,6 @@ var controller = {
       momento_del_dia,
       registro_manual,
       observaciones,
-      usuario_id,
-      finca_id,
     } = req.body;
 
     const queryDelete =
@@ -112,8 +115,8 @@ var controller = {
         registro_manual,
         observaciones,
         fechaHoraActual,
-        usuario_id,
-        finca_id,
+        req.usuario_id,
+        req.finca_id,
       ],
       (err, result) => {
         if (!err) {

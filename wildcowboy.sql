@@ -6,6 +6,8 @@ CREATE TABLE fincas (
     id int(255) auto_increment not null,
     nombre varchar (255) not null,
     direccion varchar (255) not null,
+    cx float (25) not null,
+    cy float (25) not null,
     updated datetime not null,
     CONSTRAINT pk_fincas PRIMARY KEY (id)
 ) ENGINE = InnoDb;
@@ -20,6 +22,7 @@ CREATE TABLE usuarios (
     email varchar (255) not null,
     password varchar (255) not null,
     admin_finca int (255) not null,
+    salt varchar (255) not null,
     updated datetime not null,
     CONSTRAINT pk_usuarios PRIMARY KEY (id)
 ) ENGINE = InnoDb;
@@ -99,6 +102,8 @@ CREATE TABLE animales (
     vendedor_nombre varchar (255) null,
     vendedor_telefono varchar (255) null,
     sexo varchar (255) not null,
+    color varchar (255) not null,
+    raza text null,
     updated datetime not null,
     usuario_id int (255) not null,
     CONSTRAINT pk_animales PRIMARY KEY (id),
@@ -118,6 +123,7 @@ CREATE TABLE produccion_lechera (
     observaciones varchar (255) not null,
     updated datetime not null,
     usuario_id int (255) not null,
+    finca_id int (255) not null,
     CONSTRAINT pk_produccion_lechera PRIMARY KEY (id),
     CONSTRAINT fk_produccion_animal FOREIGN KEY (animal_id) REFERENCES animales(id) ON DELETE CASCADE
 ) ENGINE = InnoDb;
@@ -129,7 +135,9 @@ CREATE TABLE inseminaciones (
     donante_identificacion varchar (255) null,
     donante_nombre varchar (255) null,
     fecha datetime not null,
-    observaciones varchar (255) not null,
+    observaciones varchar (255) null,
+    artificial varchar (255) not null,
+    codigo_pajilla varchar (255) null,
     finca_id int (255) not null,
     updated datetime not null,
     usuario_id int (255) not null,
@@ -171,6 +179,16 @@ CREATE TABLE enfermedades (
     sintomas varchar (255) not null,
     observaciones varchar (255) null,
     fecha datetime not null,
+    tratamiento varchar (255) null,
+    come int (255) not null,
+    bebe int (255) not null,
+    camina int (255) not null,
+    de_pie int (255) not null,
+    fiebre int (255) not null,
+    defeca int (255) not null,
+    baja_produccion int (255) not null,
+    herida int (255) not null,
+    emergencia int (255) not null,
     finca_id int (255) not null,
     updated datetime not null,
     usuario_id int (255) not null,
@@ -181,6 +199,7 @@ CREATE TABLE enfermedades (
 CREATE TABLE botiquin (
     id int(255) auto_increment not null,
     finca_id int (255) not null,
+    codigo varchar (255) not null,
     medicina varchar (255) not null,
     cantidad float (10) not null,
     unidades varchar (255) not null,
