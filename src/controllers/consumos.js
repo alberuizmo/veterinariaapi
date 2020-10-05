@@ -3,81 +3,73 @@
 const mysqlConnection = require("../database"); //requiero el archivo que hace la conexion de datos
 
 var controller = {
-  allMedicinas: (req, res) => {
-    //const query = "SELECT botiquin.* FROM botiquin WHERE finca_id=?";
+  allConsumos: (req, res) => {
     const query =
-      "SELECT botiquin.*, b.cantidad_existente FROM botiquin INNER JOIN (SELECT MAX(updated) as fecha_X, consumible_id,cantidad_existente FROM consumos GROUP BY consumible_id) b ON botiquin.id = b.consumible_id WHERE finca_id=?";
+      "SELECT consumos.*, botiquin.codigo, botiquin.medicina, botiquin.unidades, botiquin.marca FROM consumos INNER JOIN botiquin ON botiquin.id=consumos.consumible_id WHERE consumos.finca_id=?";
     mysqlConnection.query(query, [req.finca_id], (err, rows, fields) => {
       if (err) {
         return res
           .status(500)
-          .send({ mensaje: "Error al obtener las medicinas" });
+          .send({ mensaje: "Error al obtener los consumos" });
       }
       if (rows.length == 0) {
         return res
           .status(200)
-          .send({ mensaje: "No hay productos para mostrar", data: [] });
+          .send({ mensaje: "No hay consumos para mostrar", data: [] });
       }
       return res.status(200).send({ data: rows });
     });
   },
-  getMedicinaById: (req, res) => {
+  getConsumoById: (req, res) => {
     const id = req.params.id;
     mysqlConnection.query(
-      "select * from botiquin where id=? and finca_id=?",
+      "SELECT consumos.*, botiquin.codigo, botiquin.medicina, botiquin.unidades, botiquin.marca FROM consumos INNER JOIN botiquin ON botiquin.id=consumos.consumible_id where id=? and finca_id=?",
       [id, req.finca_id],
       (err, rows, fields) => {
         if (err) {
           return res
             .status(500)
-            .send({ mensaje: "Error al obtener la medicina" });
+            .send({ mensaje: "Error al obtener el consumo" });
         }
         if (rows.length == 0) {
           return res
             .status(404)
-            .send({ mensaje: "La producto no existe", data: [] });
+            .send({ mensaje: "El consumo no existe", data: [] });
         }
         return res.status(200).send({ data: rows[0] });
       }
     );
   },
-  saveMedicina: (req, res) => {
+  saveConsumo: (req, res) => {
     const {
-      codigo,
-      medicina,
-      cantidad,
-      unidades,
-      alerta,
-      presentacion,
-      marca,
+      consumible_id,
+      cantidad_consumida,
+      cantidad_existente,
       observaciones,
-      tipo,
+      tipo_movimiento,
     } = req.body;
-    const query = "INSERT INTO botiquin VALUES(NULL,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const query = "INSERT INTO consumos VALUES(NULL,?,?,?,?,?,?,?,?)";
     let fechaHoraActual = new Date();
     mysqlConnection.query(
       query,
       [
         req.finca_id,
-        codigo,
-        medicina,
-        cantidad,
-        unidades,
-        alerta,
-        presentacion,
-        marca,
+        consumible_id,
+        cantidad_consumida,
+        cantidad_existente,
         observaciones,
-        tipo,
+        tipo_movimiento,
         fechaHoraActual,
         req.usuario_id,
       ],
       (err, result) => {
         if (!err) {
           res.send({
-            mensaje: "Producto creada",
+            mensaje: "Consumo creada",
             id_creado: result.insertId,
           });
         } else {
+          console.log(err);
           res.status(500).send({ mensaje: "Falló en la creación" });
         }
       }

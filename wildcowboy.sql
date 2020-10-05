@@ -207,10 +207,25 @@ CREATE TABLE botiquin (
     presentacion varchar (255) not null,
     marca varchar (255) not null,
     observaciones varchar (255) not null,
+    tipo varchar (255) not null,
     updated datetime not null,
     usuario_id int (255) not null,
     CONSTRAINT pk_botiquin PRIMARY KEY (id),
     CONSTRAINT fk_botiquin_finca FOREIGN KEY (finca_id) REFERENCES fincas(id) ON DELETE CASCADE
+) ENGINE = InnoDb;
+
+CREATE TABLE consumos (
+    id int(255) auto_increment not null,
+    finca_id int (255) not null,
+    consumible_id int (255) not null,
+    cantidad_consumida float (10) not null,
+    cantidad_existente float (10) not null,
+    observaciones varchar (255) not null,
+    tipo_movimiento int (255) not null,
+    updated datetime not null,
+    usuario_id int (255) not null,
+    CONSTRAINT pk_consumos PRIMARY KEY (id),
+    CONSTRAINT fk_consumos_consumible FOREIGN KEY (consumible_id) REFERENCES botiquin(id) ON DELETE CASCADE
 ) ENGINE = InnoDb;
 
 CREATE TABLE preguntas (

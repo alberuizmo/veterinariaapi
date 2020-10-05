@@ -6,6 +6,7 @@ const express = require("express");
 const app = express();
 
 //cargo las rutas
+const consumos_routes = require("./src/routes/consumos");
 const botiquin_routes = require("./src/routes/botiquin");
 const enfermedades_routes = require("./src/routes/enfermedades");
 const partos_routes = require("./src/routes/partos");
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
 });
 
 //rutas
+app.use("/api", consumos_routes); //solicito el archivo de consumos
 app.use("/api", botiquin_routes); //solicito el archivo de botiquin
 app.use("/api", enfermedades_routes); //solicito el archivo de enfermedades
 app.use("/api", partos_routes); //solicito el archivo de partos

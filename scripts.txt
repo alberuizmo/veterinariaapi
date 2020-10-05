@@ -11,3 +11,22 @@ ALTER TABLE `calores` ADD `en_calor` INT(10) NOT NULL AFTER `observaciones`;
 ALTER TABLE `calores` ADD `post_inseminacion` INT(10) NOT NULL AFTER `en_calor`;
 
 ALTER TABLE `produccion_lechera` ADD `finca_id` INT(10) NOT NULL AFTER `usuario_id`;
+
+
+// ajustar la tabla botiquin
+ALTER TABLE `botiquin` ADD `tipo` VARCHAR(255) NOT NULL AFTER `observaciones`;
+
+//crear tabla consumos
+CREATE TABLE consumos (
+    id int(255) auto_increment not null,
+    finca_id int (255) not null,
+    consumible_id int (255) not null,
+    cantidad_consumida float (10) not null,
+    cantidad_existente float (10) not null,
+    observaciones varchar (255) not null,
+    tipo_movimiento int (255) not null,
+    updated datetime not null,
+    usuario_id int (255) not null,
+    CONSTRAINT pk_consumos PRIMARY KEY (id),
+    CONSTRAINT fk_consumos_consumible FOREIGN KEY (consumible_id) REFERENCES botiquin(id) ON DELETE CASCADE
+) ENGINE = InnoDb;
