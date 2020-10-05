@@ -1,6 +1,6 @@
-CREATE DATABASE cowboyDatabase;
+CREATE DATABASE svcn94uv5t83qq99;
 
-USE svcn94uv5t83qq99v;
+USE svcn94uv5t83qq99;
 
 CREATE TABLE fincas (
     id int(255) auto_increment not null,
